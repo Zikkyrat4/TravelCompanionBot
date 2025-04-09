@@ -14,8 +14,8 @@ TravelCompanionBot - это Telegram-бот, который помогает п�
 
 1. Клонируйте репозиторий:
 ```bash
-git clone https://github.com/your-repository/travel-bot.git
-cd travel-bot
+https://github.com/Zikkyrat4/TravelCompanionBot.git
+cd TravelCompanionBot.git
 ```
 
 2. Создайте файл .env в корневой директории проекта со следующим содержимым:
