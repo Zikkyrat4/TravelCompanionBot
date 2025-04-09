@@ -1,0 +1,39 @@
+services:
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "ollama serve &
+      sleep 15 &&
+      ollama pull mistral &&
+      wait"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+        limits:
+          memory: 16G
+
+  bot:
+    build: .
+    depends_on:
+      ollama:
+        condition: service_started
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - OLLAMA_API_URL=http://ollama:11434/api/generate
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
